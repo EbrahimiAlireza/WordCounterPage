@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    *{
+   margin: 0;
+   padding: 0;
+   box-sizing: border-box;
+}
+body{
+   background: #F1F2FA;
+}
+a{
+   text-decoration: none;
+   color: #FFF;
+}
+.text_gray{
+   color: gray;
+   margin-top: .5rem;
+}
+.text_red{
+   color: #FF3366;
+}
+.header__section{
+   text-align: center;
+   color: #333;
+   background: linear-gradient(to top,#076585,#FFF);
+   padding: 1rem 1.2rem;
+}
+.header__section > *{
+   margin-bottom: 2rem ;
+}
+.content__section{
+   border-radius: .25rem;
+   box-shadow: 0px 4px 5px 0px #C0C0C0;
+   margin: 1rem;
+   transform: translateY(-12%);
+}
+.textarea{
+   width: 100%;
+   padding: .8rem;
+   background-color: #FFF;
+   border: 1px solid #C1C1C1;
+   border-radius: .25rem;
+   outline: none;
+   line-height: 1.8rem;
+   resize: none;
+   font-size: 16px;
+}
+.content{
+   display: flex;
+   flex-direction: row;
+   margin: .25rem;
+   border-radius: .25rem;
+}
+.content section{
+   margin: 1rem .4rem;
+   background-color: #FFF;
+   border-radius: .25rem;
+   text-align: center;
+   padding: .5rem;
+   border: 1px solid #C0C0C0;
+   box-shadow: 0px 0px 5px 0px #C0C0C0;
+   font-family: Monospace !important;
+}
+.date_cotent,.time_cotent{
+  text-align: center;
+}
+@media only screen and (min-width:768px){
+.content__section{
+   margin: 0 5rem;
+}
+.content{
+   flex-direction: row;
+   flex-wrap: nowrap;
+ }
+.content section{
+   width: 100%;
+   margin: 0 .2rem;
+ }
+}
+  </style>
+  <title>WordCounter</title>
+</head>
+<body>
+	<section class="header__section">
+	  <h2>
+	    <strong class="text_red">WORD</strong>
+	    <span>
+	      ANALYTICS
+	    </span>
+	  </h2>
+	  <p>
+	    <a href="https://instagram.com/alirezaebrahimi262">
+	      Alireza Ebrahimi
+	    </a>
+	  </p>
+	</section>
+	<section class="content__section">
+	  <form accesskey=".">
+	    <textarea cols="10" rows="8" placeholder="Enter Youer Text" class="textarea" onkeyup="findType(this)"></textarea>
+	  </form>
+	 <section class="content">
+	  <section class="wordCounterArea">
+	      <strong class="word"></strong>
+	       <p class="text_gray">
+	         Word
+	       </p>
+	  </section>
+	  <section class="characterCounterArea">
+	      <strong class="char"></strong>
+	       <p class="text_gray">
+	         Character
+	       </p>
+	  </section>
+	  <section class="twitterCounterArea">
+	      <strong class="twitter"></strong>
+	       <p class="text_gray">
+	         Twitter
+	       </p>
+	  </section>
+	  <section class="facebookCounterArea">
+	      <strong class="facebook"></strong>
+	       <p class="text_gray">
+	         Facebook
+	       </p>
+	  </section>
+	</section>
+ </section>
+ <p class="time_cotent text_gray"></p>
+ <p class="date_cotent text_gray"></p>
+</body>
+<script>
+  window.addEventListener("load",(f)=>{
+function GetElement(element){
+  return document.querySelector(element);
+}
+const wordCountEl=GetElement(".word");
+const characterCountEl=GetElement(".char");
+const twitterCountEl=GetElement(".twitter");
+const facebookCountEl=GetElement(".facebook");
+let textAreaEl=GetElement(".textarea")
+textAreaEl.addEventListener("input",CheckValue);
+const wordTwitterCount=280;
+const wordFaceBookCount=1200;
+function CheckValue(){
+  let character=textAreaEl.value.length;
+  let word=textAreaEl.value.split(" ").length;
+  if(textAreaEl.value.length===0){
+    word=0;
+  }
+  if(textAreaEl.value.includes("<script>") || textAreaEl.value.includes("<script >")){
+    textArea.value=textArea.value.replace("<script>"," ")
+  }
+  characterCountEl.innerText=character;
+  wordCountEl.innerText=word;
+  let wordTwitterCountLeft=wordTwitterCount-character;
+  let wordFaceBookCountLeft=wordFaceBookCount-character;
+if(wordTwitterCountLeft<=0){
+  twitterCountEl.classList.add("text_red");
+}else{
+  twitterCountEl.classList.remove("text_red");
+}
+  twitterCountEl.innerText=wordTwitterCountLeft;
+  
+if(wordFaceBookCountLeft<=0){
+  facebookCountEl.classList.add("text_red");
+}else{
+  facebookCountEl.classList.remove("text_red");
+}
+  facebookCountEl.innerText=wordFaceBookCountLeft;
+ }
+setInterval((f) => {
+  const clock = GetElement('.time_cotent');
+  let time = new Date();
+  let second = time.getSeconds();
+  let minutes = time.getMinutes();
+  let hours = time.getHours();
+  let day = 'AM';
+  if (hours > 12) {
+    day = 'PM';
+    hours = hours - 12;
+  }
+  if (hours == 0) {
+    hours = 12;
+  }
+  if (second < 10) {
+    second = '0' + second;
+  }
+  if (minutes < 10) {
+    minutes = '0' + minutes;
+  }
+  if (hours < 10) {
+    hours = '0' + hours;
+  }
+  clock.innerHTML = `${hours}:${minutes}:${second} ${day}`;
+}, 1000);
+let date=new Date();
+GetElement(".date_cotent").innerText=date.toLocaleDateString();
+});
+function findType(element) {
+ let char=new RegExp("[\u0600-\u06FF]");
+  if (char.test(element.value)==true){
+      element.style.direction="rtl";
+    }else{
+      element.style.direction="ltr";
+    }
+ }
+</script>
+</html>
